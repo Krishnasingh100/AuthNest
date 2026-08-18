@@ -3,11 +3,7 @@ import { Router } from 'express'
 import {
   register,
   login,
-  logout,
-  verifyEmail,
-  resendVerificationEmail,
-  forgotPassword,
-  resetPassword
+  logout
 } from '../controllers/authController.js'
 
 import {
@@ -17,25 +13,76 @@ import {
 
 const router = Router()
 
-// Register
-router.post('/register', validateRegister, register)
 
-// Login
-router.post('/login', validateLogin, login)
+// =====================================================
+// REGISTER
+// =====================================================
 
-// Logout
-router.post('/logout', logout)
+router.post(
+  '/register',
+  validateRegister,
+  register
+)
 
+
+// =====================================================
+// LOGIN
+// =====================================================
+
+router.post(
+  '/login',
+  validateLogin,
+  login
+)
+
+
+// =====================================================
+// LOGOUT
+// =====================================================
+
+router.post(
+  '/logout',
+  logout
+)
+
+
+// =====================================================
+// EMAIL VERIFICATION - TEMPORARILY DISABLED
+// =====================================================
+
+/*
 // Verify email
-router.get('/verify-email/:token', verifyEmail)
+router.get(
+  '/verify-email/:token',
+  verifyEmail
+)
 
 // Resend verification email
-router.post('/resend-verification', resendVerificationEmail)
+router.post(
+  '/resend-verification',
+  resendVerificationEmail
+)
+*/
 
+
+// =====================================================
+// PASSWORD RESET - TEMPORARILY DISABLED
+// =====================================================
+
+/*
 // Forgot password
-router.post('/forgot-password', forgotPassword)
+router.post(
+  '/forgot-password',
+  forgotPassword
+)
 
 // Reset password
-router.post('/reset-password/:token', resetPassword)
+router.post(
+  '/reset-password/:token',
+  resetPassword
+)
+*/
+
 
 export default router
+
