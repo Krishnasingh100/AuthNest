@@ -1,15 +1,9 @@
 import dotenv from 'dotenv'
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 
 dotenv.config()
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
-  }
-})
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 // ==================== VERIFICATION EMAIL ====================
 
@@ -17,8 +11,8 @@ export const sendVerificationEmail = async (email, token) => {
   const verificationUrl =
     `${process.env.CLIENT_URL}/verify-email/${token}`
 
-  await transporter.sendMail({
-    from: `"AuthNest" <${process.env.EMAIL_USER}>`,
+  const { data, error } = await resend.emails.send({
+    from: 'AuthNest <onboarding@resend.dev>',
     to: email,
     subject: 'Verify your AuthNest email',
 
@@ -65,7 +59,15 @@ export const sendVerificationEmail = async (email, token) => {
       </div>
     `
   })
+
+  if (error) {
+    console.error('Verification email error:', error)
+    throw new Error(error.message)
+  }
+
+  return data
 }
+
 
 // ==================== PASSWORD RESET EMAIL ====================
 
@@ -73,8 +75,8 @@ export const sendPasswordResetEmail = async (email, token) => {
   const resetUrl =
     `${process.env.CLIENT_URL}/reset-password/${token}`
 
-  await transporter.sendMail({
-    from: `"AuthNest" <${process.env.EMAIL_USER}>`,
+  const { data, error } = await resend.emails.send({
+    from: 'AuthNest <onboarding@resend.dev>',
     to: email,
     subject: 'Reset your AuthNest password',
 
@@ -123,4 +125,11 @@ export const sendPasswordResetEmail = async (email, token) => {
       </div>
     `
   })
+
+  if (error) {
+    console.error('Password reset email error:', error)
+    throw new Error(error.message)
+  }
+
+  return data
 }
