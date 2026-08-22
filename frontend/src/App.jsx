@@ -12,6 +12,7 @@ import NotFound from './pages/NotFound.jsx'
 
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
+import VerifyEmail from './pages/VerifyEmail.jsx'
 
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
@@ -57,6 +58,11 @@ function App() {
             <Route
               path="/reset-password/:token"
               element={<ResetPassword />}
+            />
+
+            <Route
+              path="/verify-email/:token"
+              element={<VerifyEmail />}
             />
 
             {/* Protected Dashboard */}

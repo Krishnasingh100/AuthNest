@@ -1,31 +1,34 @@
-import { createContext, useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { login as loginService, register as registerService, getProfile } from '../services/authService.js'
-
-export const AuthContext = createContext()
+import { AuthContext } from './authContext.js'
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      fetchProfile()
-    } else {
+  const fetchProfile = useCallback(async () => {
+    try {
+      const data = await getProfile()
+      setUser(data.data)
+    } catch {
+      localStorage.removeItem('token')
+      setUser(null)
+    } finally {
       setLoading(false)
     }
   }, [])
 
-  const fetchProfile = async () => {
-    try {
-      const data = await getProfile()
-      setUser(data.data)
-    } catch (err) {
-      localStorage.removeItem('token')
-    } finally {
-      setLoading(false)
-    }
-  }
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (localStorage.getItem('token')) {
+        fetchProfile()
+      } else {
+        setLoading(false)
+      }
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
+  }, [fetchProfile])
 
   const login = async (email, password) => {
     const data = await loginService(email, password)
@@ -36,8 +39,6 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (name, email, password) => {
     const data = await registerService(name, email, password)
-    localStorage.setItem('token', data.data.token)
-    setUser(data.data.user)
     return data
   }
 

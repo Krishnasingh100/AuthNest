@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../services/api'
+import { requestPasswordReset } from '../services/authService.js'
 
 function ForgotPassword() {
   const navigate = useNavigate()
@@ -24,13 +24,10 @@ function ForgotPassword() {
     try {
       setLoading(true)
 
-      const response = await api.post(
-        '/auth/forgot-password',
-        { email }
-      )
+      const response = await requestPasswordReset(email)
 
       setSuccess(
-        response.data.message ||
+        response.message ||
         'Password reset email has been sent'
       )
 

@@ -5,7 +5,11 @@ node_modules/
 # Environment variables
 .env
 .env.*
+*.env
+*.env.*
 !.env.example
+!*.env.example
+.envrc
 
 # Build files
 dist/
@@ -29,3 +33,7 @@ Thumbs.db
 
 # Testing
 coverage/
+
+# Runtime files
+*.pid
+*.pid.lock

@@ -8,8 +8,11 @@ import userRoutes from './routes/userRoutes.js'
 import { errorHandler } from './middleware/errorMiddleware.js'
 import helmet from 'helmet'
 import { authLimiter } from './middleware/rateLimiter.js'
+import { validateEnvironment } from './config/env.js'
+import { ApiError } from './utils/apiError.js'
 
 dotenv.config()
+validateEnvironment()
 
 const app = express()
 
@@ -24,9 +27,13 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-// CORS
+const clientUrl = process.env.CLIENT_URL
+
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin(origin, callback) {
+    if (!origin || origin === clientUrl) return callback(null, true)
+    return callback(new ApiError(403, 'Origin is not allowed by CORS'))
+  },
   credentials: true
 }))
 

@@ -35,7 +35,7 @@ const Register = () => {
     }
     try {
       await register(formData.name, formData.email, formData.password)
-      navigate('/dashboard')
+      navigate('/login')
     } catch (err) {
       setApiError(err.response?.data?.message || 'Registration failed')
     }

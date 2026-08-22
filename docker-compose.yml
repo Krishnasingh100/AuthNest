@@ -12,6 +12,8 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:?Set VITE_API_URL to the public backend API URL before building}
     container_name: authnest-frontend
     ports:
       - "5173:80"

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import api from '../services/api'
+import { resetPassword as resetPasswordService } from '../services/authService.js'
 
 function ResetPassword() {
   const { token } = useParams()
@@ -37,15 +37,10 @@ function ResetPassword() {
     try {
       setLoading(true)
 
-      const response = await api.post(
-        `/auth/reset-password/${token}`,
-        {
-          password
-        }
-      )
+      const response = await resetPasswordService(token, password)
 
       setSuccess(
-        response.data.message || 'Password reset successfully'
+        response.message || 'Password reset successfully'
       )
 
       setPassword('')

@@ -1,88 +1,15 @@
 import { Router } from 'express'
-
-import {
-  register,
-  login,
-  logout
-} from '../controllers/authController.js'
-
-import {
-  validateRegister,
-  validateLogin
-} from '../middleware/validationMiddleware.js'
+import { forgotPassword, login, logout, register, resendVerificationEmail, resetPassword, verifyEmail } from '../controllers/authController.js'
+import { validateLogin, validateRegister } from '../middleware/validationMiddleware.js'
 
 const router = Router()
 
-
-// =====================================================
-// REGISTER
-// =====================================================
-
-router.post(
-  '/register',
-  validateRegister,
-  register
-)
-
-
-// =====================================================
-// LOGIN
-// =====================================================
-
-router.post(
-  '/login',
-  validateLogin,
-  login
-)
-
-
-// =====================================================
-// LOGOUT
-// =====================================================
-
-router.post(
-  '/logout',
-  logout
-)
-
-
-// =====================================================
-// EMAIL VERIFICATION - TEMPORARILY DISABLED
-// =====================================================
-
-/*
-// Verify email
-router.get(
-  '/verify-email/:token',
-  verifyEmail
-)
-
-// Resend verification email
-router.post(
-  '/resend-verification',
-  resendVerificationEmail
-)
-*/
-
-
-// =====================================================
-// PASSWORD RESET - TEMPORARILY DISABLED
-// =====================================================
-
-/*
-// Forgot password
-router.post(
-  '/forgot-password',
-  forgotPassword
-)
-
-// Reset password
-router.post(
-  '/reset-password/:token',
-  resetPassword
-)
-*/
-
+router.post('/register', validateRegister, register)
+router.post('/login', validateLogin, login)
+router.post('/logout', logout)
+router.get('/verify-email/:token', verifyEmail)
+router.post('/resend-verification', resendVerificationEmail)
+router.post('/forgot-password', forgotPassword)
+router.post('/reset-password/:token', resetPassword)
 
 export default router
-

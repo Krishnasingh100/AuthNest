@@ -19,7 +19,7 @@ const Profile = () => {
         <div className="space-y-3">
           {[
             { label: 'User ID', value: user?._id },
-            { label: 'Email Verified', value: 'Yes' },
+            { label: 'Email Verified', value: user?.isEmailVerified ? 'Yes' : 'No' },
             { label: 'Account Type', value: 'Standard' },
             { label: 'Member Since', value: new Date(user?.createdAt).toLocaleDateString() },
           ].map((item, i) => (

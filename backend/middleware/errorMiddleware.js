@@ -1,15 +1,25 @@
 import { ApiError } from '../utils/apiError.js'
 
 const errorHandler = (err, req, res, next) => {
-  console.error("===== ERROR =====")
-  console.error(err)
-  console.error(err.stack)
+  if (process.env.NODE_ENV === 'production') {
+    console.error(`Unhandled request error: ${err.name || 'Error'}`)
+  } else {
+    console.error('===== ERROR =====')
+    console.error(err)
+    console.error(err.stack)
+  }
 
   let error = err
 
+  if (error?.code === 11000) {
+    error = new ApiError(409, 'An account with this email already exists')
+  }
+
   if (!(error instanceof ApiError)) {
     const statusCode = error.statusCode || 500
-    const message = error.message || 'Something went wrong'
+    const message = process.env.NODE_ENV === 'production'
+      ? 'An unexpected error occurred'
+      : error.message || 'Something went wrong'
     error = new ApiError(statusCode, message, error?.errors || [])
   }
 
